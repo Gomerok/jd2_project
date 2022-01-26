@@ -77,11 +77,10 @@ public class UserDaoImpl implements UserDao {
     public User readUserByLogin(String userLogin) {
         Session session = sessionFactory.getCurrentSession();
         String query = "FROM User where login like '" + userLogin + "'";
-        User user = new User();
+        User user = null;
         try {
             user = session.createQuery(query, User.class).getSingleResult();
         } catch (Exception e) {
-            user=null;
             e.printStackTrace();
         }
         return user;
@@ -92,7 +91,12 @@ public class UserDaoImpl implements UserDao {
     public User readUserByEmail(String userEmail) {
         Session session = sessionFactory.getCurrentSession();
         String query = "FROM User where email like '" + userEmail + "'";
-        User user = session.createQuery(query, User.class).getSingleResult();
+        User user = null;
+        try {
+            user = session.createQuery(query, User.class).getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return user;
     }
 
