@@ -19,9 +19,9 @@ public interface UserDao {
 
     void deleteUser(User user);
 
-    User readUserByLogin(String userLogin);
+    List<User> readUserByLogin(String userLogin);
 
-    User readUserByEmail(String userEmail);
+    List<User> readUserByEmail(String userEmail);
 
     User getUserByToken(String sessionToken);
 

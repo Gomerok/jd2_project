@@ -33,7 +33,7 @@ public class DbInit {
 
     @PostConstruct
     private void userTableInit() {
-        if (userDao.readUserByLogin("admin")==null) {
+        if (userDao.readUserByLogin("admin").isEmpty()) {
             User admin = new User();
 
             admin.setPassword("admin");

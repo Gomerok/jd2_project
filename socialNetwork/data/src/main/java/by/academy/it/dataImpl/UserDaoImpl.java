@@ -74,30 +74,20 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     @Transactional
-    public User readUserByLogin(String userLogin) {
+    public List<User> readUserByLogin(String userLogin) {
         Session session = sessionFactory.getCurrentSession();
         String query = "FROM User where login like '" + userLogin + "'";
-        User user = null;
-        try {
-            user = session.createQuery(query, User.class).getSingleResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return user;
+        List<User> userList = session.createQuery(query, User.class).list();
+        return userList;
     }
 
     @Override
     @Transactional
-    public User readUserByEmail(String userEmail) {
+    public List<User> readUserByEmail(String userEmail) {
         Session session = sessionFactory.getCurrentSession();
         String query = "FROM User where email like '" + userEmail + "'";
-        User user = null;
-        try {
-            user = session.createQuery(query, User.class).getSingleResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return user;
+        List<User> userList = session.createQuery(query, User.class).list();
+        return userList;
     }
 
     @Override
