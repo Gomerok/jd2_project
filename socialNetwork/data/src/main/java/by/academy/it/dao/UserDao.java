@@ -15,7 +15,7 @@ public interface UserDao {
 
     String findIdByLogin(String id);
 
-    void updateUser(User user);
+    void update(User user);
 
     void deleteUser(User user);
 
@@ -26,4 +26,6 @@ public interface UserDao {
     User getUserByToken(String sessionToken);
 
     List<String> getSessionTokenAndUserRole(String id);
+
+
 }

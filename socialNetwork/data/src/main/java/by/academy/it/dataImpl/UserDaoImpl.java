@@ -56,13 +56,15 @@ public class UserDaoImpl implements UserDao {
     public String findIdByLogin(String login) {
         Session session = sessionFactory.getCurrentSession();
         String query = "select id FROM User where login like '" + login + "'";
-        List<String> ids = session.createQuery(query).list();
-        return ids.get(0);
+        Object userObject = (Object) session.createQuery(query).getSingleResult();
+        return userObject.toString();
     }
 
     @Override
-    public void updateUser(User user) {
-
+    @Transactional
+    public void update(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        session.update(user);
     }
 
     @Override
@@ -93,30 +95,37 @@ public class UserDaoImpl implements UserDao {
     public User getUserByToken(String sessionToken) {
         Session session = sessionFactory.getCurrentSession();
 
-        String hql = "SELECT firstName,lastName,login,email,gender,profileImageName " +
-                "FROM User where sessionToken = : sessionToken";
-        Query query = session.createQuery(hql);
-        query.setParameter("sessionToken", sessionToken);
-        Object[] userObject = (Object[]) query.getSingleResult();
-        User user = new User();
-        if(userObject[0]!=null){
-            user.setFirstName(userObject[0].toString());
-        }
-        if(userObject[1]!=null){
-            user.setLastName(userObject[1].toString());
-        }
-        if(userObject[2]!=null){
-            user.setLogin(userObject[2].toString());
-        }
-        if(userObject[3]!=null){
-            user.setEmail(userObject[3].toString());
-        }
-        if(userObject[4]!=null){
-            user.setGender(userObject[4].toString());
-        }
-        if(userObject[5]!=null){
-            user.setProfileImageName(userObject[5].toString());
-        }
+//        String hql = "SELECT userId, firstName,lastName,login,email,gender,profileImageName " +
+//                "FROM User where sessionToken = : sessionToken";
+//        Query query = session.createQuery(hql);
+//        query.setParameter("sessionToken", sessionToken);
+//        Object[] userObject = (Object[]) query.getSingleResult();
+//        User user = new User();
+//
+//        if(userObject[0]!=null){
+//            user.setUserId(userObject[0].toString());
+//        }
+//        if(userObject[1]!=null){
+//            user.setFirstName(userObject[1].toString());
+//        }
+//        if(userObject[2]!=null){
+//            user.setLastName(userObject[2].toString());
+//        }
+//        if(userObject[3]!=null){
+//            user.setLogin(userObject[3].toString());
+//        }
+//        if(userObject[4]!=null){
+//            user.setEmail(userObject[4].toString());
+//        }
+//        if(userObject[5]!=null){
+//            user.setGender(userObject[5].toString());
+//        }
+//        if(userObject[6]!=null){
+//            user.setProfileImageName(userObject[6].toString());
+//        }
+
+        String hql = "FROM User where sessionToken like '" + sessionToken + "'";
+        User user = session.createQuery(hql, User.class).getSingleResult();
         return user;
     }
 
@@ -140,5 +149,6 @@ public class UserDaoImpl implements UserDao {
         userDetails.add(userRole);
         return userDetails;
     }
+
 
 }

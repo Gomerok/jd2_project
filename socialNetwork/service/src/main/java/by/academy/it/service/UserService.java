@@ -81,5 +81,22 @@ public class UserService {
         user.setGender(currentUser.getGender());
         return user;
     }
+
+    public void updateUser(UserCommand editUser, String sessionToken) {
+        User user = userDao.getUserByToken(sessionToken);
+        user.setFirstName(editUser.getFirstName());
+        user.setLastName(editUser.getLastName());
+        user.setLogin(editUser.getLogin());
+        if (!editUser.getPassword().equals("password")) {
+            user.setPassword(editUser.getPassword());
+        }
+        user.setEmail(editUser.getEmail());
+        if (editUser.getProfileImageName() != null) {
+            user.setProfileImageName(editUser.getProfileImageName());
+        }
+        user.setProfileText(editUser.getProfileText());
+        user.setGender(editUser.getGender());
+        userDao.update(user);
+    }
 }
 

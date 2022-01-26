@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Controller
+@SessionAttributes("currentUser")
 public class EditProfileController {
 
     @Value("${upload.path}")
@@ -31,35 +32,48 @@ public class EditProfileController {
     @Autowired
     private UserValidator userValidator;
 
-    public static ModelAndView editView = new ModelAndView("edit-profile");
-
     @GetMapping("/home-page/edit-profile")
-    public ModelAndView editProfileView(@SessionAttribute("authorizedUser") AuthorizedUser authorizedUser) {
+    public ModelAndView editProfileView(@SessionAttribute(name = "authorizedUser", required = false) AuthorizedUser authorizedUser) {
+        if (authorizedUser == null) {
+            return new ModelAndView("redirect:/");
+        }
         UserCommand currentUser = userService.getUserBySessionToken(authorizedUser.getSessionToken());
-        return new ModelAndView("edit-profile").addObject("editUser", currentUser);
+        return new ModelAndView("edit-profile")
+                .addObject("currentUser", currentUser)
+                .addObject("editUser", currentUser);
     }
 
     @PostMapping("/home-page/edit-profile.do")
-    public ModelAndView editProfileViewDo(@ModelAttribute("editUser") @Valid UserCommand editUserCommand,
+    public ModelAndView editProfileViewDo(@ModelAttribute("editUser") @Valid UserCommand editUser,
                                           BindingResult result,
+                                          @SessionAttribute("authorizedUser") AuthorizedUser authorizedUser,
+                                          @SessionAttribute("currentUser") UserCommand currentUser,
                                           @RequestParam(name = "newProfileImage", required = false) MultipartFile newProfileImage) throws IOException {
+
+        ModelAndView editView = new ModelAndView("edit-profile").addObject("editUser", editUser);
         if (result.hasErrors()) {
-            System.out.println(result.getFieldError("password"));
-            System.out.println(editUserCommand);
-            return new ModelAndView("edit-profile");
+            return editView;
         }
 
-        Map<String, String> errors = userValidator.addUserValidator(editUserCommand);
-        if (!errors.isEmpty()) {
-            if (errors.get("existUserLogin") != null) {
-                result.addError(new FieldError("editUser", "login", errors.get("existUserLogin")));
+        if (!currentUser.getLogin().equals(editUser.getLogin())) {
+            Map<String, String> errors = userValidator.addUserValidator(editUser);
+            if (!errors.isEmpty()) {
+                if (errors.get("existUserLogin") != null) {
+                    result.addError(new FieldError("editUser", "login", errors.get("existUserLogin")));
+                    return editView;
+                }
             }
-            if (errors.get("existUserEmail") != null) {
-                result.addError(new FieldError("editUser", "email", errors.get("existUserEmail")));
-            }
-            return new ModelAndView("edit-profile");
         }
+        if (!currentUser.getEmail().equals(editUser.getEmail())) {
+            Map<String, String> errors = userValidator.addUserValidator(editUser);
+            if (!errors.isEmpty()) {
+                if (errors.get("existUserEmail") != null) {
+                    result.addError(new FieldError("editUser", "email", errors.get("existUserEmail")));
+                    return editView;
+                }
+            }
 
+        }
         if (newProfileImage.getOriginalFilename() != null && !newProfileImage.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
@@ -69,9 +83,9 @@ public class EditProfileController {
             String uuidFile = UUID.randomUUID().toString();
             String resultFileName = uuidFile + "." + newProfileImage.getOriginalFilename();
             newProfileImage.transferTo(new File(uploadPath + "/" + resultFileName));
-            editUserCommand.setProfileImageName(resultFileName);
+            editUser.setProfileImageName(resultFileName);
         }
-//        userService.createUser(editUserCommand);
+        userService.updateUser(editUser, authorizedUser.getSessionToken());
 
         return new ModelAndView("redirect:/home-page");
     }

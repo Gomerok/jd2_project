@@ -17,7 +17,7 @@
         	<br>
             <img id="uploadPreview" height="275" width="250" />
 			<br>
-        	<input id="uploadImage" type="file" name="profileImage" onchange="PreviewImage();" />
+        	<input id="uploadImage" type="file" name="newProfileImage" onchange="PreviewImage();" />
             </div>
 			<script type="text/javascript">
                 function PreviewImage() {
@@ -32,39 +32,39 @@
         </div>
             <div class="container-fluid row">
                         <!-- Form Group (username)-->
-                        <div class="error">
+                        <div>
                             <form:errors path="firstName"/>
                         </div>
                        	<div>
                       	    <label for="first_name"><b>First Name</b></label>
-                            <form:input path="firstName" name="firstName" type="text" placeholder="${currentUser.firstName}" class="form-control" id="firstName" value="${currentUser.firstName}"/>
+                            <form:input path="firstName" name="firstName" type="text" placeholder="${editUser.firstName}" class="form-control" id="firstName" value="${editUser.firstName}"/>
                       	</div>
 
-                      	<div class="error">
+                      	<div>
                             <form:errors path="lastName"/>
                         </div>
                       	<div>
                        	    <label for="last_name"><b>Last Name</b></label>
-                            <form:input path="lastName" name="lastName" type="text" placeholder="${currentUser.lastName}" class="form-control" id="lastName"/>
+                            <form:input path="lastName" name="lastName" type="text" placeholder="${editUser.lastName}" class="form-control" id="lastName" value="${editUser.lastName}"/>
                        	</div>
 
-                       	<div class="error">
+                       	<div>
                             <form:errors path="login"/>
                         </div>
                        	<div>
                       	    <label for="login"><b>User name</b></label>
-                            <form:input path="login" name="login" type="text" placeholder="${currentUser.login}" class="form-control" id="login"/>
+                            <form:input path="login" name="login" type="text" placeholder="${editUser.login}" class="form-control" id="login" value="${editUser.login}"/>
                       	</div>
 
-                       	<div class="error">
+                       	<div>
                             <form:errors path="email"/>
                         </div>
                        	<div>
-                      	    <label for="email" class="form-label"><b>Email address</b></label>
-                            <form:input path="email" name="email" type="text" placeholder="${currentUser.email}" class="form-control" id="email"/>
+                      	    <label for="email"><b>Email address</b></label>
+                            <form:input path="email" name="email" type="text" placeholder="${editUser.email}" class="form-control" id="email" value="${editUser.email}"/>
                         </div>
 
-                        <div class="error">
+                        <div>
                             <form:errors path="gender"/>
                         </div>
                        	<div>
@@ -78,21 +78,21 @@
                             <label for="gender"><b>Other</b></label>
                         </div>
                       	<br>
-                        <div class="error">
+                        <div>
                             <form:errors path="password"/>
                         </div>
                        	<div>
                             <label for="password"><b>New password</b></label>
-                            <form:input path="password" name="password" type="password" class="form-control" id="password"/>
+                            <form:input path="password" name="password" type="password" class="form-control" id="password" value="password"/>
                        	</div>
 
-					<div class="error">
+					<div>
 						<form:errors path="profileText"/>
 					</div>
 					<div class="center">
-						<label for="profileText" class="form-label" placeholder="${currentUser.profileText}"><b>Profile Text</b></label>
+						<label for="profileText" placeholder="${editUser.profileText}" ><b>Profile Text</b></label>
 					<br>
-						<form:textarea path="profileText" rows="10" cols="70" name="profileText"/>
+						<form:textarea path="profileText" rows="10" cols="70" name="profileText" value="${editUser.profileText}"/>
 					</div>
 					<hr>
 					<div>
