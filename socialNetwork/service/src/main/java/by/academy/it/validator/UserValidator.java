@@ -18,25 +18,25 @@ public class UserValidator {
     private UserDao userDao;
 
     public Map<String, String> addUserValidator(UserCommand newUser) {
-        List<User> userListByLogin = userDao.readUserByLogin(newUser.getLogin());
-        List<User> userListByEmail = userDao.readUserByEmail(newUser.getEmail());
+        User userByLogin = userDao.readUserByLogin(newUser.getLogin());
+        User userByEmail = userDao.readUserByEmail(newUser.getEmail());
         Map<String, String> validationErrors = new HashMap<>();
-        if (!userListByLogin.isEmpty()) {
+        if (userByLogin != null) {
             validationErrors.put("existUserLogin", "User with this username already exists");
         }
-        if (!userListByEmail.isEmpty()) {
+        if (userByEmail != null) {
             validationErrors.put("existUserEmail", "User with this email already exists");
         }
         return validationErrors;
     }
 
     public Map<String, String> loginUserValidator(LoginUserCommand loginUser) {
-        List<User> userListByLogin = userDao.readUserByLogin(loginUser.getLogin());
+        User userByLogin = userDao.readUserByLogin(loginUser.getLogin());
         Map<String, String> validationErrors = new HashMap<>();
-        if (userListByLogin.isEmpty()) {
+        if (userByLogin==null) {
             validationErrors.put("loginError", "Login not exist");
         } else {
-            if (!userListByLogin.get(0).getPassword()
+            if (!userByLogin.getPassword()
                     .equals(loginUser.getPassword())) {
                 validationErrors.put("passwordError", "Invalid password");
             }
