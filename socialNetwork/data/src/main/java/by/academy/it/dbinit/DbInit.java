@@ -38,6 +38,7 @@ public class DbInit {
 
             admin.setPassword("admin");
             admin.setLogin("admin");
+            admin.setEmail("admin@gmail.com");
 
             admin.setRoles(Collections.singleton(new Role(2L, "ROLE_ADMIN")));
             userDao.addUser(admin);
