@@ -77,7 +77,13 @@ public class UserDaoImpl implements UserDao {
     public User readUserByLogin(String userLogin) {
         Session session = sessionFactory.getCurrentSession();
         String query = "FROM User where login like '" + userLogin + "'";
-        User user = session.createQuery(query, User.class).getSingleResult();
+        User user = new User();
+        try {
+            user = session.createQuery(query, User.class).getSingleResult();
+        } catch (Exception e) {
+            user=null;
+            e.printStackTrace();
+        }
         return user;
     }
 
