@@ -25,19 +25,19 @@
             </li>
 
 			<li class="nav-item">
-				<a class="nav-link" href="/uiT/search-user">Search user</a>
+				<a class="nav-link" href="/uiT/home-page/search-user/1">Search user</a>
             </li>
 
 			<li class="nav-item">
-				<a class="nav-link" href="/uiT/friends-list">Friends list</a>
+				<a class="nav-link" href="/uiT/home-page/friends-list">Friends list</a>
             </li>
 
 			<li class="nav-item">
-				<a class="nav-link" href="/uiT/subscriptions">Subscriptions</a>
+				<a class="nav-link" href="/uiT/home-page/subscriptions">Subscriptions</a>
             </li>
 
 			<li class="nav-item">
-				<a class="nav-link" href="/uiT/black-list">Black list</a>
+				<a class="nav-link" href="/uiT/home-page/black-list">Black list</a>
             </li>
 
 			<li class="nav-item">

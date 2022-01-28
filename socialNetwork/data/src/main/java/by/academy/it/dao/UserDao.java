@@ -27,5 +27,5 @@ public interface UserDao {
 
     List<String> getSessionTokenAndUserRole(String id);
 
-
+    List<User> search(String searchParam, int pageid, int total);
 }

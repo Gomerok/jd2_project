@@ -9,11 +9,8 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.transform.sax.SAXResult;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +22,22 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     @Qualifier("socialNetworkSessionFactory")
     private SessionFactory sessionFactory;
+
+    @Override
+    @Transactional
+    public List<User> search(String searchParam, int pageid, int total) {
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createQuery("from User where firstName like '" + searchParam +
+                "%' or lastName like '" + searchParam + "%' ", User.class);
+
+        query.setFirstResult(pageid-1);
+        query.setMaxResults(total);
+
+        List<User> personList =query.list();
+        System.out.println(personList.toString());
+        return personList;
+    }
 
     @Override
     @Transactional
