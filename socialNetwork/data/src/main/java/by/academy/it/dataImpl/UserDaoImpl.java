@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+
 @Repository
+@Transactional
 public class UserDaoImpl implements UserDao {
 
     @Autowired
@@ -25,18 +27,31 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     @Transactional
-    public List<User> search(String searchParam, int pageid, int total) {
+    public List<User> search(String searchParam, int pageId, int pageSize) {
         Session session = sessionFactory.openSession();
 
         Query query = session.createQuery("from User where firstName like '" + searchParam +
                 "%' or lastName like '" + searchParam + "%' ", User.class);
+        query.setFirstResult(calculateOffset(pageId, pageSize));
+        query.setMaxResults(pageSize);
 
-        query.setFirstResult(pageid-1);
-        query.setMaxResults(total);
-
-        List<User> personList =query.list();
-        System.out.println(personList.toString());
+        List<User> personList = query.list();
         return personList;
+    }
+
+    private int calculateOffset(int page, int pageSize) {
+        return ((pageSize * page) - pageSize);
+    }
+
+    @Override
+    @Transactional
+    public long countUser(String searchParam) {
+        Session session = sessionFactory.openSession();
+        Query query = session
+                .createQuery("select count(u.userId) from User u where firstName like '" + searchParam +
+                        "%' or lastName like '" + searchParam + "%' ");
+        Long countResults  = (Long) query.uniqueResult();
+        return countResults;
     }
 
     @Override
@@ -162,6 +177,4 @@ public class UserDaoImpl implements UserDao {
         userDetails.add(userRole);
         return userDetails;
     }
-
-
 }

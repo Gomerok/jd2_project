@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface UserDao {
+
+    long countUser(String Param);
+
     void addUser(User user);
 
     List<User> readAllUser();
