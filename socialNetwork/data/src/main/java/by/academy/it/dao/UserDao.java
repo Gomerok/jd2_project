@@ -1,7 +1,7 @@
 package by.academy.it.dao;
 
 import by.academy.it.pojo.User;
-import org.springframework.transaction.annotation.Transactional;
+import by.academy.it.pojo.UserNews;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,25 +10,29 @@ public interface UserDao {
 
     long countUser(String Param);
 
-    void addUser(User user);
+    Serializable saveUser(User user);
 
     List<User> readAllUser();
 
-    User readUserById(String id);
+    User readUserById(Serializable id);
 
-    String findIdByLogin(String id);
-
-    void update(User user);
+    void updateUser(User user);
 
     void deleteUser(User user);
 
-    List<User> readUserByLogin(String userLogin);
+    User readUserByLogin(String userLogin);
 
-    List<User> readUserByEmail(String userEmail);
+    User readUserByEmail(String userEmail);
 
-    User getUserByToken(String sessionToken);
+    List<User> getUsersBySearchParam(String searchParam, int pageid, int total);
 
-    List<String> getSessionTokenAndUserRole(String id);
+    int updateActivitiStatus(Serializable id, String status);
 
-    List<User> search(String searchParam, int pageid, int total);
+    String readActivitiStatus(Serializable id);
+
+    int updatePassword(String newPassword, Serializable id);
+
+    List<User> readUsersByRole(String role);
 }
+
+
