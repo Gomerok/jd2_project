@@ -1,4 +1,4 @@
-package by.academy.it.controller;
+package by.academy.it.controllers.controller;
 
 import by.academy.it.dto.UserValidDto;
 import by.academy.it.service.UserService;

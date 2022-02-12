@@ -1,4 +1,4 @@
-package by.academy.it.controller;
+package by.academy.it.controllers.controller;
 
 import by.academy.it.pojo.UserNews;
 import by.academy.it.service.UserNewsService;

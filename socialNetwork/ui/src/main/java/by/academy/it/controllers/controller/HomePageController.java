@@ -1,11 +1,10 @@
-package by.academy.it.controller;
+package by.academy.it.controllers.controller;
 
 import by.academy.it.dto.AuthorizedUser;
 import by.academy.it.dto.UserDto;
 import by.academy.it.pojo.UserNews;
 import by.academy.it.service.UserNewsService;
 import by.academy.it.service.UserService;
-import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
