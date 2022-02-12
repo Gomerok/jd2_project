@@ -1,6 +1,6 @@
 package by.academy.it.controller;
 
-import by.academy.it.dto.UserCommand;
+import by.academy.it.dto.UserValidDto;
 import by.academy.it.service.UserService;
 import by.academy.it.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,27 +32,29 @@ public class RegistrationController {
 
     @GetMapping("/registration")
     public ModelAndView registrationView() {
-
-        return new ModelAndView("registration").addObject("addNewUser", new UserCommand());
+        return new ModelAndView("registration").addObject("newUser", new UserValidDto());
     }
 
     @PostMapping("/registration.do")
-    public ModelAndView registrationViewDo(@ModelAttribute("addNewUser") @Valid UserCommand addUserCommand,
+    public ModelAndView registrationViewDo(@ModelAttribute("newUser") @Valid UserValidDto newUser,
                                            BindingResult result,
                                            @RequestParam("profileImage") MultipartFile profileImage
     ) throws IOException {
 
+        if(profileImage.getOriginalFilename().length()>60){
+            result.addError(new FieldError("editUser", "profileImageName", "Image name too big, max=60 characters"));
+        }
         if (result.hasErrors()) {
-            return new ModelAndView("registration");
+            return new ModelAndView("registration").addObject("profileImage",profileImage);
         }
 
-        Map<String, String> errors = userValidator.addUserValidator(addUserCommand);
+        Map<String, String> errors = userValidator.addUserValidator(newUser);
         if (!errors.isEmpty()) {
             if (errors.get("existUserLogin") != null) {
-                result.addError(new FieldError("addNewUser", "login", errors.get("existUserLogin")));
+                result.addError(new FieldError("newUser", "login", errors.get("existUserLogin")));
             }
             if (errors.get("existUserEmail") != null) {
-                result.addError(new FieldError("addNewUser", "email", errors.get("existUserEmail")));
+                result.addError(new FieldError("newUser", "email", errors.get("existUserEmail")));
             }
             return new ModelAndView("registration");
         }
@@ -66,9 +68,9 @@ public class RegistrationController {
             String uuidFile = UUID.randomUUID().toString();
             String resultFileName = uuidFile + "." + profileImage.getOriginalFilename();
             profileImage.transferTo(new File(uploadPath + "/" + resultFileName));
-            addUserCommand.setProfileImageName(resultFileName);
+            newUser.setProfileImageName(resultFileName);
         }
-        userService.createUser(addUserCommand);
+        userService.saveUser(newUser);
 
         return new ModelAndView("redirect:/login");
 

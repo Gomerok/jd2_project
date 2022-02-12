@@ -1,7 +1,7 @@
 package by.academy.it.controller;
 
 import by.academy.it.dto.AuthorizedUser;
-import by.academy.it.dto.LoginUserCommand;
+import by.academy.it.dto.LoginUserDto;
 import by.academy.it.service.UserService;
 import by.academy.it.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @SessionAttributes("authorizedUser")
 public class LoginController {
-
 
     @Autowired
     UserService userService;
@@ -33,17 +31,17 @@ public class LoginController {
     @GetMapping("/login")
     public ModelAndView userList(Model model) {
         return new ModelAndView("login")
-                .addObject("loginUser", new LoginUserCommand());
+                .addObject("loginUser", new LoginUserDto());
     }
 
     @PostMapping("/login.do")
-    public ModelAndView login(@ModelAttribute("loginUser") @Valid LoginUserCommand loginUserCommand,
+    public ModelAndView login(@ModelAttribute("loginUser") @Valid LoginUserDto loginUserDto,
                               BindingResult result, Model model) {
         if (result.hasErrors()) {
             return new ModelAndView("login");
         }
 
-        Map<String, String> errors = userValidator.loginUserValidator(loginUserCommand);
+        Map<String, String> errors = userValidator.loginUserValidator(loginUserDto);
         if (!errors.isEmpty()) {
             if (errors.get("loginError") != null) {
                 result.addError(new FieldError("loginUser", "login", errors.get("loginError")));
@@ -54,8 +52,10 @@ public class LoginController {
             return new ModelAndView("login");
         }
 
-        AuthorizedUser authorizedUser = userService.getSessionTokenAndUserRoleByLogin(loginUserCommand.getLogin());
-
+        AuthorizedUser authorizedUser = userService.getUserIdAndUserRoleByLogin(loginUserDto.getLogin());
+        if (userService.checkBlocked(authorizedUser.getUserId())) {
+            return new ModelAndView("blocked_page");
+        }
         return new ModelAndView("redirect:/home-page")
                 .addObject("authorizedUser", authorizedUser);
     }

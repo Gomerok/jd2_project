@@ -1,7 +1,7 @@
 package by.academy.it.controller;
 
 import by.academy.it.dto.AuthorizedUser;
-import by.academy.it.dto.UserCommand;
+import by.academy.it.dto.UserValidDto;
 import by.academy.it.service.UserService;
 import by.academy.it.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,21 +37,28 @@ public class EditProfileController {
         if (authorizedUser == null) {
             return new ModelAndView("redirect:/");
         }
-        UserCommand currentUser = userService.getUserBySessionToken(authorizedUser.getSessionToken());
+        if (userService.checkBlocked(authorizedUser.getUserId())) {
+            return new ModelAndView("blocked_page");
+        }
+        UserValidDto currentUser = userService.getRegistrationUserByUserId(authorizedUser.getUserId());
         return new ModelAndView("edit-profile")
                 .addObject("currentUser", currentUser)
                 .addObject("editUser", currentUser);
     }
 
     @PostMapping("/home-page/edit-profile.do")
-    public ModelAndView editProfileViewDo(@ModelAttribute("editUser") @Valid UserCommand editUser,
+    public ModelAndView editProfileViewDo(@ModelAttribute("editUser") @Valid UserValidDto editUser,
                                           BindingResult result,
                                           @SessionAttribute("authorizedUser") AuthorizedUser authorizedUser,
-                                          @SessionAttribute("currentUser") UserCommand currentUser,
+                                          @SessionAttribute("currentUser") UserValidDto currentUser,
                                           @RequestParam(name = "newProfileImage", required = false) MultipartFile newProfileImage) throws IOException {
 
         ModelAndView editView = new ModelAndView("edit-profile").addObject("editUser", editUser);
-        if (result.hasErrors()) {
+
+        if(newProfileImage.getOriginalFilename().length()>60){
+            result.addError(new FieldError("editUser", "profileImageName", "Image name too big, max=60 characters"));
+        }
+        if (result.hasErrors() && !result.hasFieldErrors("password")) {
             return editView;
         }
 
@@ -85,9 +92,41 @@ public class EditProfileController {
             newProfileImage.transferTo(new File(uploadPath + "/" + resultFileName));
             editUser.setProfileImageName(resultFileName);
         }
-        userService.updateUser(editUser, authorizedUser.getSessionToken());
+        userService.updateUser(editUser, authorizedUser.getUserId());
+
 
         return new ModelAndView("redirect:/home-page");
     }
 
+    @GetMapping("/home-page/edit-password")
+    public ModelAndView editPasswordViewDo(@SessionAttribute(name = "authorizedUser", required = false) AuthorizedUser authorizedUser) {
+        if (authorizedUser == null) {
+            return new ModelAndView("redirect:/");
+        }
+        if (userService.checkBlocked(authorizedUser.getUserId())) {
+            return new ModelAndView("blocked_page");
+        }
+        return new ModelAndView("edit-password");
+    }
+
+    @PostMapping("/home-page/edit-password.do")
+    public ModelAndView editPasswordView(@RequestParam("oldPassword") String oldPassword,
+                                         @RequestParam("newPassword") String newPassword,
+                                         @SessionAttribute(name = "authorizedUser", required = false) AuthorizedUser authorizedUser) {
+
+        ModelAndView editPasswordView = new ModelAndView("edit-password");
+        String invalidPassword = "Invalid password";
+        if(!userValidator.checkPassword(oldPassword, authorizedUser.getUserId())){
+            return editPasswordView.addObject("invalidPassword",invalidPassword);
+        }
+
+        String errorPassword = "Password cannot be empty min=8 max=25 characters";
+        if(newPassword.length()<8){
+            return editPasswordView.addObject("errorPassword",errorPassword);
+        }
+
+        userService.updateUserPassword(newPassword,authorizedUser.getUserId());
+
+        return new ModelAndView("redirect:/home-page");
+    }
 }

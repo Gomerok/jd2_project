@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class AuthorizedUser {
 
-    private String sessionToken;
+    private String userId;
     private String userRole;
 
     public AuthorizedUser(String token, String role) {
-        this.sessionToken = token;
+        this.userId = token;
         this.userRole = role;
     }
 }

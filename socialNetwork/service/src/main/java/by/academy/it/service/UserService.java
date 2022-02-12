@@ -2,16 +2,16 @@ package by.academy.it.service;
 
 import by.academy.it.dao.RoleDao;
 import by.academy.it.dao.UserDao;
-import by.academy.it.dto.UserCommand;
+import by.academy.it.dto.UserDto;
+import by.academy.it.dto.UserValidDto;
 import by.academy.it.dto.AuthorizedUser;
 import by.academy.it.pojo.Role;
 import by.academy.it.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.*;
 
 @Service
@@ -20,16 +20,13 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    @PersistenceContext
-    private EntityManager em;
-
     @Autowired
     private RoleDao roleDao;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public void createUser(UserCommand newUser) {
+    public void saveUser(UserValidDto newUser) {
 
         User user = new User();
         user.setFirstName(newUser.getFirstName());
@@ -38,40 +35,32 @@ public class UserService {
         user.setEmail(newUser.getEmail());
         user.setGender(newUser.getGender());
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-        user.setPassword(newUser.getPassword());
+
+        String salt = BCrypt.gensalt(12);
+        String hashedPassword = BCrypt.hashpw(newUser.getPassword(), salt);
+
+        user.setPassword(hashedPassword);
+
         user.setProfileImageName(newUser.getProfileImageName());
-        user.setCreateUserDate(new Date());
+        user.setCreateDate(new Date());
         user.setProfileText(newUser.getProfileText());
-        user.setIsDeleted(0);
-        userDao.addUser(user);
+        user.setActivitiStatus("ACTIVE");
+        userDao.saveUser(user);
     }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        List<User> users = userDao.readUserByLogin(username);
-//
-//        if (users.isEmpty()) {
-//            throw new UsernameNotFoundException("User not found");
-//        }
-//
-//        return users.get(0);
-//    }
-//
-//    public List<User> allUsers() {
-//        return userDao.readAllUser();
-//    }
-
-    public AuthorizedUser getSessionTokenAndUserRoleByLogin(String login) {
-        String id = userDao.findIdByLogin(login);
-
-        List<String> userDetails = userDao.getSessionTokenAndUserRole(id);
-        AuthorizedUser authorizedUser = new AuthorizedUser(userDetails.get(0), userDetails.get(1));
-        return authorizedUser;
+    public AuthorizedUser getUserIdAndUserRoleByLogin(String login) {
+        User user = userDao.readUserByLogin(login);
+        Set<Role> userRoles = user.getRoles();
+        String userRole = null;
+        for (Role role : userRoles) {
+            userRole = role.getName();
+        }
+        return new AuthorizedUser(user.getId(), userRole);
     }
 
-    public UserCommand getUserBySessionToken(String sessionToken) {
-        User currentUser = userDao.getUserByToken(sessionToken);
-        UserCommand user = new UserCommand();
+    public UserValidDto getRegistrationUserByUserId(String userId) {
+        User currentUser = userDao.readUserById(userId);
+        UserValidDto user = new UserValidDto();
         user.setFirstName(currentUser.getFirstName());
         user.setLastName(currentUser.getLastName());
         user.setLogin(currentUser.getLogin());
@@ -82,21 +71,52 @@ public class UserService {
         return user;
     }
 
-    public void updateUser(UserCommand editUser, String sessionToken) {
-        User user = userDao.getUserByToken(sessionToken);
+    public UserDto getUserDtoByUserId(String userId) {
+        User user = userDao.readUserById(userId);
+        UserDto userDto = new UserDto(user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getGender(),
+                user.getProfileImageName(),
+                user.getProfileText(),
+                user.getActivitiStatus());
+        return userDto;
+    }
+
+    public void updateUser(UserValidDto editUser, String userId) {
+        User user = userDao.readUserById(userId);
         user.setFirstName(editUser.getFirstName());
         user.setLastName(editUser.getLastName());
         user.setLogin(editUser.getLogin());
-        if (!editUser.getPassword().equals("password")) {
-            user.setPassword(editUser.getPassword());
-        }
         user.setEmail(editUser.getEmail());
         if (editUser.getProfileImageName() != null) {
             user.setProfileImageName(editUser.getProfileImageName());
         }
         user.setProfileText(editUser.getProfileText());
         user.setGender(editUser.getGender());
-        userDao.update(user);
+        System.out.println(user);
+        userDao.updateUser(user);
+    }
+
+    public void updateUserPassword(String newPassword, String userId) {
+        String salt = BCrypt.gensalt(12);
+        String hashedPassword = BCrypt.hashpw(newPassword, salt);
+        userDao.updatePassword(hashedPassword, userId);
+    }
+
+    public void deleteUser(String userId) {
+        User user = userDao.readUserById(userId);
+        userDao.deleteUser(user);
+    }
+
+    public void blockedOrActiveUser(String id, String status) {
+        userDao.updateActivitiStatus(id, status);
+    }
+
+    public boolean checkBlocked(String userId) {
+        String activitiStatus = userDao.readActivitiStatus(userId);
+        return activitiStatus.equals("BLOCKED");
     }
 }
 

@@ -3,15 +3,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style><%@include file="/WEB-INF/jsp/css/registration_styles.css"%></style>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+    <style><%@include file="/WEB-INF/jsp/css/registration_styles.css"%></style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body>
 
-<form:form method="post" action="/uiT/registration.do" class="registration" modelAttribute="addNewUser" enctype="multipart/form-data">
+<form:form method="post" action="/uiT/registration.do" class="registration" modelAttribute="newUser" enctype="multipart/form-data">
   <div class="container">
     <h1>Create a new account</h1>
     <hr>
@@ -20,7 +19,7 @@
     </div>
 	<div>
 	    <label for="first_name"><b>First Name</b></label>
-        <form:input path="firstName" name="firstName" type="text" class="form-control" id="firstName"/>
+        <form:input path="firstName" name="firstName" type="text" class="form-control" id="firstName" maxlength="19"/>
 	</div>
 
 	<div class="error">
@@ -28,7 +27,7 @@
     </div>
 	<div>
 	    <label for="last_name"><b>Last Name</b></label>
-        <form:input path="lastName" name="lastName" type="text" class="form-control" id="lastName"/>
+        <form:input path="lastName" name="lastName" type="text" class="form-control" id="lastName" maxlength="19"/>
 	</div>
 
 	<div class="error">
@@ -36,7 +35,7 @@
     </div>
 	<div>
 	    <label for="login"><b>User name</b></label>
-        <form:input path="login" name="login" type="text" class="form-control" id="login"/>
+        <form:input path="login" name="login" type="text" class="form-control" id="login" maxlength="14"/>
 	</div>
 
 	<div class="error">
@@ -44,7 +43,7 @@
     </div>
 	<div>
 	    <label for="email" class="form-label"><b>Email address</b></label>
-        <form:input path="email" name="email" type="text" class="form-control" id="email"/>
+        <form:input path="email" name="email" type="text" class="form-control" id="email" maxlength="24"/>
     </div>
 
     <div class="error">
@@ -67,15 +66,17 @@
     </div>
 	<div>
         <label for="password"><b>Password</b></label>
-        <form:input path="password" name="password" type="password" class="form-control" id="password"/>
+        <form:input path="password" name="password" type="password" class="form-control" id="password" maxlength="20"/>
 	</div>
-
+    <div class="error">
+        <form:errors path="profileImageName"/>
+    </div>
     <div class="center">
         <label for="profileImage"><b>Profile image</b></label>
 	    <br>
         <img id="uploadPreview" class="image" />
         <br>
-	    <input id="uploadImage" type="file" name="profileImage" onchange="PreviewImage();" />
+	    <input id="uploadImage" type="file" name="profileImage" onchange="PreviewImage();"/>
         <script type="text/javascript">
             function PreviewImage() {
                 var oFReader = new FileReader();
@@ -95,7 +96,7 @@
     <div class="center">
         <label for="profileText" class="form-label"><b>Profile Text</b></label>
     <br>
-        <form:textarea path="profileText" rows="10" cols="70" name="profileText"/>
+        <form:textarea path="profileText" rows="5" cols="70" name="profileText" maxlength="254"/>
 	</div>
     <hr>
     <form:button id ="button" type="submit" class="signinbtn">Sign Up</form:button>
@@ -103,9 +104,4 @@
   </div>
 </form:form>
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-</body>
-</html>
+<%@include file="/WEB-INF/jsp/_footer.jsp"%>

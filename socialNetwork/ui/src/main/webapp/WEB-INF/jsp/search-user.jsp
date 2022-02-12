@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="_header.jsp"/>
-<h1>Search people</h1>
+<h2>Search people</h2>
 <div class="col-md-3 ">
     <form class="d-flex" action="/uiT/home-page/search-user/1">
         <input name="param" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" value="${sessionScope.str}">
@@ -8,27 +8,40 @@
     </form>
 </div>
 <br>
+<form class="d-flex" action="/uiT/home-page/search-user/${pageId}">
 <table class="table">
 <tbody>
 
 <c:forEach items="${results}" var="result">
     <tr>
-        <td>${result.firstName}</td>
-        <td>${result.lastName}</td>
+        <td><c:if test = "${result.firstName == null || result.firstName==''}">Non</c:if>${result.firstName}</td>
+        <td><c:if test = "${result.lastName == null || result.lastName==''}">Non</c:if>${result.lastName}</td>
         <td>${result.gender}</td>
         <td>
-		<form class="d-flex" action="/uiT/home-page/search-user/${pageId}">
-		<input type="hidden" name="userId" value="${result.id}">
-		<button type="submit" class="btn btn-info btn-sm">Info</button>
+		<a class="btn btn-primary" href="/uiT/home-page/search-user/user-info/${result.id}" role="button">Info</a>
 		</td>
-
-		</form>
+		<c:if test = "${sessionScope.authorizedUser.userRole=='ROLE_ADMIN'}">
+		<td>
+            <a class="btn btn-primary" href="/uiT/home-page/send-messages/${result.id}" role="button">Send message</a>
+        </td>
+        <td>
+        <c:if test = "${result.status == 'ACTIVE'}">
+            <button id ="blockedButton" name="adminAction" value="${result.status} ${result.id}" type="submit" class="btn btn-warning">Blocked</button>
+        </c:if>
+        <c:if test = "${result.status == 'BLOCKED'}">
+            <button id ="activeButton" name="adminAction" value="${result.status} ${result.id}" type="submit" class="btn btn-success">Active</button>
+        </c:if>
+        </td>
+		<td>
+		    <button id ="deleteButton" name="adminAction" value="DELETE ${result.id}" type="submit" class="btn btn-danger">Delete</button>
+        </td>
+        </c:if>
     </tr>
 </c:forEach>
 
 </tbody>
 </table>
-
+</form>
 <nav aria-label="Page navigation">
   <ul class="pagination">
 	<c:if test = "${(pageId-1) != 0}">

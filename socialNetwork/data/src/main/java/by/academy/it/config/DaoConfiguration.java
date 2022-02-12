@@ -1,8 +1,7 @@
 package by.academy.it.config;
 
 
-import by.academy.it.pojo.Role;
-import by.academy.it.pojo.User;
+import by.academy.it.pojo.*;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
@@ -63,7 +62,7 @@ public class DaoConfiguration {
         sessionFactory.setHibernateProperties(properties);
 
         sessionFactory.setAnnotatedPackages("by.academy.it.pojo");
-        sessionFactory.setAnnotatedClasses(User.class, Role.class);
+        sessionFactory.setAnnotatedClasses(User.class, Role.class, Friends.class, Messages.class, UserNews.class);
 
         return sessionFactory;
 

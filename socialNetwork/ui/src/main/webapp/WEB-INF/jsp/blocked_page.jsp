@@ -10,14 +10,9 @@
 <body style="background: #f1f1f1">
 	<div id="container" class="d-flex justify-content-center m-2 p-2">
 		<div class="col-4 border rounded m-2 p-2 shadow-lg p-3 mb-5" style="background-color: #F9F5F5;">
-			<h3 align="center">Are you sure you want to log out?<h3>
-			<div class="row">
+			<h3 align="center">You were blocked<h3>
 			<div align="center" class="col m-2 p-2">
-				<a class="btn btn-primary bg-warning m-3 p-3" role="button" href="/uiT/">Yes</a>
-			</div>
-			<div align="center" class="col m-2 p-2">
-               <a class="btn btn-primary bg-success m-3 p-3" role="button" href="/uiT/home-page">No</a>
-			</div>
+				<a class="btn btn-primary bg-success m-3 p-3" role="button" href="/uiT/">Welcome Page</a>
 			</div>
 		</div>
  	</div>
