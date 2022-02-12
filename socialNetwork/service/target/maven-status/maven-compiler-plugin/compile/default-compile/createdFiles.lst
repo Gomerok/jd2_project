@@ -1,6 +1,0 @@
-by\academy\it\service\UserService.class
-by\academy\it\validator\UserValidator.class
-by\academy\it\dto\LoginUserCommand.class
-by\academy\it\config\ServiceConfiguration.class
-by\academy\it\dto\UserCommand.class
-by\academy\it\dto\AuthorizedUser.class

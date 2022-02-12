@@ -1,8 +1,0 @@
-by\academy\it\dao\UserDao.class
-by\academy\it\config\DaoConfiguration.class
-by\academy\it\dao\RoleDao.class
-by\academy\it\dbinit\DbInit.class
-by\academy\it\dataImpl\RoleDaoImpl.class
-by\academy\it\dataImpl\UserDaoImpl.class
-by\academy\it\pojo\User.class
-by\academy\it\pojo\Role.class
