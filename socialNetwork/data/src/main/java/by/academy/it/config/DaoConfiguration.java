@@ -4,6 +4,7 @@ package by.academy.it.config;
 import by.academy.it.pojo.*;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import liquibase.integration.spring.SpringLiquibase;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -56,9 +57,9 @@ public class DaoConfiguration {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        properties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
         properties.setProperty("show_sql", "true");
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         sessionFactory.setHibernateProperties(properties);
 
         sessionFactory.setAnnotatedPackages("by.academy.it.pojo");
@@ -74,4 +75,11 @@ public class DaoConfiguration {
         return new HibernateTransactionManager(factory);
     }
 
+    @Bean
+    public SpringLiquibase liquibase(Properties dataSourceProperties) {
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setChangeLog("classpath:liquibase-changeLog.xml");
+        liquibase.setDataSource(socialNetworkDataSource(dataSourceProperties));
+        return liquibase;
+    }
 }

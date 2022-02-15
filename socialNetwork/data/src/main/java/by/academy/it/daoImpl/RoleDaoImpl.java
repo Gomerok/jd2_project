@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Repository
-@Transactional
+
 public class RoleDaoImpl implements RoleDao {
 
     final static Logger logger = Logger.getLogger(RoleDaoImpl.class.getName());
@@ -25,7 +25,6 @@ public class RoleDaoImpl implements RoleDao {
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional
     public Serializable saveRole(Role role) {
         Session session = sessionFactory.getCurrentSession();
         Serializable id = session.save(role);
@@ -34,7 +33,6 @@ public class RoleDaoImpl implements RoleDao {
     }
 
     @Override
-    @Transactional
     public List<Role> readRoleByName(String roleName) {
         Session session = sessionFactory.getCurrentSession();
         List<Role> roles =
@@ -44,7 +42,6 @@ public class RoleDaoImpl implements RoleDao {
     }
 
     @Override
-    @Transactional
     public int deleteRoleByName(String roleName) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("delete Role where name = :roleName");

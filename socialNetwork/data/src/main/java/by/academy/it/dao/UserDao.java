@@ -33,6 +33,7 @@ public interface UserDao {
     int updatePassword(String newPassword, Serializable id);
 
     List<User> readUsersByRole(String role);
+
 }
 
 

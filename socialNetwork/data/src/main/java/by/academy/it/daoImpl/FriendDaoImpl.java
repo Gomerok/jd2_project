@@ -23,7 +23,6 @@ public class FriendDaoImpl implements FriendDao {
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional
     public Serializable saveFriends(Friends friends) {
         Session session = sessionFactory.getCurrentSession();
         Serializable id = session.save(friends);
@@ -32,7 +31,6 @@ public class FriendDaoImpl implements FriendDao {
     }
 
     @Override
-    @Transactional
     public void deleteFriends(String senderId, String recipientId) {
         Session session = sessionFactory.getCurrentSession();
         Friends friends = getFriend(senderId, recipientId);
@@ -43,7 +41,6 @@ public class FriendDaoImpl implements FriendDao {
     }
 
     @Override
-    @Transactional
     public void updateFriends(Friends userFriends) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(userFriends);
@@ -51,7 +48,6 @@ public class FriendDaoImpl implements FriendDao {
     }
 
     @Override
-    @Transactional
     public Friends getFriend(Serializable userId, Serializable friendId) {
         Session session = sessionFactory.getCurrentSession();
         List<Friends> userFriends = session.createQuery("from Friends where (friendId=:friendId and user_id=:userId) " +
@@ -68,7 +64,6 @@ public class FriendDaoImpl implements FriendDao {
 
     @SuppressWarnings("unchecked")
     @Override
-    @Transactional
     public List<Friends> readAllFriends() {
         Session session = sessionFactory.getCurrentSession();
         List<Friends> userFriends = session.createQuery("from UserFriends ").list();
@@ -77,7 +72,6 @@ public class FriendDaoImpl implements FriendDao {
     }
 
     @Override
-    @Transactional
     public List<Friends> readFriendsByUserId(Serializable userId) {
         Session session = sessionFactory.getCurrentSession();
         List<Friends> userFriends = session
@@ -89,7 +83,6 @@ public class FriendDaoImpl implements FriendDao {
     }
 
     @Override
-    @Transactional
     public List<Friends> readAllFriendsByUserId(Serializable userId) {
         Session session = sessionFactory.getCurrentSession();
         List<Friends> userFriends = session

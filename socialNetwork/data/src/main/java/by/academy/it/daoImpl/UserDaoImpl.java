@@ -17,7 +17,6 @@ import java.util.List;
 
 
 @Repository
-@Transactional
 public class UserDaoImpl implements UserDao {
 
     final static Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
@@ -27,7 +26,6 @@ public class UserDaoImpl implements UserDao {
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional
     public List<User> getUsersBySearchParam(String searchParam, int pageId, int pageSize) {
         Session session = sessionFactory.getCurrentSession();
 
@@ -45,7 +43,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public long countUser(String searchParam) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session
@@ -56,7 +53,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public int updateActivitiStatus(Serializable id, String activitiStatus) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("update User set activitiStatus = :activitiStatus where id = :id ");
@@ -68,7 +64,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public String readActivitiStatus(Serializable id) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("select activitiStatus from User where id = :id ");
@@ -79,7 +74,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public int updatePassword(String password, Serializable id) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("update User set password = :password where id = :id ");
@@ -91,7 +85,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public List<User> readUsersByRole(String userRole) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("select u from User u join fetch u.news join u.roles r where r.name = :roleName", User.class);
@@ -102,7 +95,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public Serializable saveUser(User user) {
         Session session = sessionFactory.getCurrentSession();
         Serializable id = session.save(user);
@@ -111,7 +103,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public List<User> readAllUser() {
         Session session = sessionFactory.getCurrentSession();
         List<User> users =
@@ -121,7 +112,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public User readUserById(Serializable id) {
         Session session = sessionFactory.getCurrentSession();
         User user = (User) session.get(User.class, id);
@@ -130,7 +120,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public void updateUser(User user) {
         Session session = sessionFactory.getCurrentSession();
         System.out.println(user);
@@ -139,7 +128,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public void deleteUser(User user) {
         Session session = sessionFactory.getCurrentSession();
         Serializable id = user.getId();
@@ -151,7 +139,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public User readUserByLogin(String userLogin) {
         Session session = sessionFactory.getCurrentSession();
         String query = "from User where login like '" + userLogin + "'";
@@ -164,7 +151,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public User readUserByEmail(String userEmail) {
         Session session = sessionFactory.getCurrentSession();
         String query = "from User where email like '" + userEmail + "'";

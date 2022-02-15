@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Repository
+
 public class UserNewsDaoImpl implements UserNewsDao {
 
     final static Logger logger = Logger.getLogger(UserNewsDaoImpl.class.getName());
@@ -23,7 +24,6 @@ public class UserNewsDaoImpl implements UserNewsDao {
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional
     public Serializable saveUserNews(UserNews userNews) {
         Session session = sessionFactory.getCurrentSession();
         Serializable id = session.save(userNews);
@@ -32,7 +32,6 @@ public class UserNewsDaoImpl implements UserNewsDao {
     }
 
     @Override
-    @Transactional
     public List<UserNews> readUserNewsByUserId(Serializable userId) {
         Session session = sessionFactory.getCurrentSession();
         List<UserNews> userNews = session
@@ -44,7 +43,6 @@ public class UserNewsDaoImpl implements UserNewsDao {
     }
 
     @Override
-    @Transactional
     public void deleteNews(Serializable newsId) {
         Session session = sessionFactory.getCurrentSession();
         UserNews userNews = session.get(UserNews.class, newsId);

@@ -23,7 +23,6 @@ public class MessagesDaoImpl implements MessagesDao {
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional
     public Serializable saveMessage(Messages message) {
         Session session = sessionFactory.getCurrentSession();
         Serializable id = session.save(message);
@@ -32,7 +31,6 @@ public class MessagesDaoImpl implements MessagesDao {
     }
 
     @Override
-    @Transactional
     public List<Messages> readMessagesByUserIdAndFriendId(String userId, String friendId) {
         Session session = sessionFactory.getCurrentSession();
         List<Messages> messages = session
