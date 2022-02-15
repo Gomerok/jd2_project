@@ -22,7 +22,6 @@ public class WelcomeController {
     public ModelAndView home(HttpSession session) {
         session.removeAttribute("authorizedUser");
 
-
         List<UserNews> userNewsList = userNewsService.getWelcomePageNews("ROLE_ADMIN");
 
         return new ModelAndView("index").addObject("userNewsList",userNewsList);
