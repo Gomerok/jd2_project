@@ -5,6 +5,7 @@ import by.academy.it.dto.UserDto;
 import by.academy.it.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class SearchService {
     @Autowired
     private UserDao userDao;
 
+    @Transactional
     public UserDto getUserById(String id) {
         User user = userDao.readUserById(id);
         UserDto resultUser = new UserDto(user.getId(),
@@ -29,6 +31,7 @@ public class SearchService {
         return resultUser;
     }
 
+    @Transactional
     public List<UserDto> searchAmongAll(String userId, String searchParam, int pageId, int pageSize) {
         if (searchParam == null) {
             searchParam = "";
@@ -51,6 +54,7 @@ public class SearchService {
         return results;
     }
 
+    @Transactional
     public long pageCount(String searchParam) {
         if (searchParam == null) {
             searchParam = "";

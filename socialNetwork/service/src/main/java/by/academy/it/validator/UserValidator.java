@@ -7,6 +7,7 @@ import by.academy.it.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,7 @@ public class UserValidator {
     @Autowired
     private UserDao userDao;
 
+    @Transactional
     public Map<String, String> addUserValidator(UserValidDto newUser) {
         User userByLogin = userDao.readUserByLogin(newUser.getLogin());
         User userByEmail = userDao.readUserByEmail(newUser.getEmail());
@@ -30,6 +32,7 @@ public class UserValidator {
         return validationErrors;
     }
 
+    @Transactional
     public Map<String, String> loginUserValidator(LoginUserDto loginUser) {
         User userByLogin = userDao.readUserByLogin(loginUser.getLogin());
         Map<String, String> validationErrors = new HashMap<>();
@@ -43,6 +46,7 @@ public class UserValidator {
         return validationErrors;
     }
 
+    @Transactional
     public boolean checkPassword(String password_plaintext, String userId) {
         boolean password_verified = false;
 

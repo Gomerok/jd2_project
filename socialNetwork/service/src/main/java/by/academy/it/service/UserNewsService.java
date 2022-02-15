@@ -6,6 +6,7 @@ import by.academy.it.pojo.User;
 import by.academy.it.pojo.UserNews;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -19,12 +20,14 @@ public class UserNewsService {
     @Autowired
     UserNewsDao userNewsDao;
 
+    @Transactional
     public void addUserNews(String userId, String newsHeader, String newsDescription, Date date) {
 
         UserNews userNews = new UserNews(userDao.readUserById(userId), newsHeader, newsDescription, date);
         userNewsDao.saveUserNews(userNews);
     }
 
+    @Transactional
     public List<UserNews> getNews(String userId) {
         List<UserNews> userNews = userNewsDao.readUserNewsByUserId(userId);
         if(userNews.isEmpty()){
@@ -33,10 +36,12 @@ public class UserNewsService {
         return userNews;
     }
 
+    @Transactional
     public void deleteNews(String newsId) {
         userNewsDao.deleteNews(newsId);
     }
 
+    @Transactional
     public List<UserNews> getWelcomePageNews(String userRole) {
         List<User> users = userDao.readUsersByRole(userRole);
         if (users.isEmpty()) {

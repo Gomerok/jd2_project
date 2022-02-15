@@ -26,7 +26,6 @@ public class UserValidDto {
     @Size(min = 8, max = 25, message = "Password cannot be empty min=8 max=25 characters")
     private String password;
 
-    @Size(min = 0, max = 60, message = "Image name too big, max=60 characters")
     private String profileImageName;
 
     @Size(min = 0, max = 250, message = "Maximum number of characters 250")

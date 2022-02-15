@@ -5,6 +5,7 @@ import by.academy.it.dao.UserDao;
 import by.academy.it.pojo.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ public class MessagesService {
     @Autowired
     MessagesDao messagesDao;
 
+    @Transactional
     public void addMessage(String userId, String friendId, String value, Date date) {
 
         Messages senderUserMessage = new Messages();
@@ -28,6 +30,7 @@ public class MessagesService {
         messagesDao.saveMessage(senderUserMessage);
     }
 
+    @Transactional
     public List<Messages> getMessages(String userId, String friendId) {
         List<Messages> messages = messagesDao.readMessagesByUserIdAndFriendId(userId, friendId);
         return messages;

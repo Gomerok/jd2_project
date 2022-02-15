@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -26,6 +27,7 @@ public class UserService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Transactional
     public void saveUser(UserValidDto newUser) {
 
         User user = new User();
@@ -48,6 +50,7 @@ public class UserService {
         userDao.saveUser(user);
     }
 
+    @Transactional
     public AuthorizedUser getUserIdAndUserRoleByLogin(String login) {
         User user = userDao.readUserByLogin(login);
         Set<Role> userRoles = user.getRoles();
@@ -58,6 +61,7 @@ public class UserService {
         return new AuthorizedUser(user.getId(), userRole);
     }
 
+    @Transactional
     public UserValidDto getRegistrationUserByUserId(String userId) {
         User currentUser = userDao.readUserById(userId);
         UserValidDto user = new UserValidDto();
@@ -71,6 +75,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public UserDto getUserDtoByUserId(String userId) {
         User user = userDao.readUserById(userId);
         UserDto userDto = new UserDto(user.getId(),
@@ -84,6 +89,7 @@ public class UserService {
         return userDto;
     }
 
+    @Transactional
     public void updateUser(UserValidDto editUser, String userId) {
         User user = userDao.readUserById(userId);
         user.setFirstName(editUser.getFirstName());
@@ -99,21 +105,25 @@ public class UserService {
         userDao.updateUser(user);
     }
 
+    @Transactional
     public void updateUserPassword(String newPassword, String userId) {
         String salt = BCrypt.gensalt(12);
         String hashedPassword = BCrypt.hashpw(newPassword, salt);
         userDao.updatePassword(hashedPassword, userId);
     }
 
+    @Transactional
     public void deleteUser(String userId) {
         User user = userDao.readUserById(userId);
         userDao.deleteUser(user);
     }
 
+    @Transactional
     public void blockedOrActiveUser(String id, String status) {
         userDao.updateActivitiStatus(id, status);
     }
 
+    @Transactional
     public boolean checkBlocked(String userId) {
         String activitiStatus = userDao.readActivitiStatus(userId);
         return activitiStatus.equals("BLOCKED");
