@@ -8,7 +8,10 @@ import by.academy.it.service.SearchService;
 import by.academy.it.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -39,14 +42,11 @@ public class SubscriptionsController {
 
         List<Friends> userFriends = friendsService.getUserFriends(authorizedUser.getUserId());
         List<UserDto> subscriptionsList = new ArrayList<>();
-        if (userFriends != null) {
-            for (Friends friends : userFriends) {
-                if (friends.getStatus().equals("subscriber")) {
-                    UserDto loadedUser = searchService.getUserById(friends.getUser().getId());
-                    subscriptionsList.add(loadedUser);
-                }
+        for (Friends friends : userFriends) {
+            if (friends.getStatus().equals("subscriber")) {
+                UserDto loadedUser = searchService.getUserById(friends.getUser().getId());
+                subscriptionsList.add(loadedUser);
             }
-
         }
 
         return modelAndView.addObject("subscriptionsList", subscriptionsList);
@@ -70,14 +70,12 @@ public class SubscriptionsController {
 
         List<Friends> userFriends = friendsService.getUserFriends(authorizedUser.getUserId());
         List<UserDto> subscriptionsList = new ArrayList<>();
-        if (userFriends != null) {
-            for (Friends friends : userFriends) {
-                if (friends.getStatus().equals("subscriber")) {
-                    UserDto loadedUser = searchService.getUserById(friends.getUser().getId());
-                    subscriptionsList.add(loadedUser);
-                }
-            }
 
+        for (Friends friends : userFriends) {
+            if (friends.getStatus().equals("subscriber")) {
+                UserDto loadedUser = searchService.getUserById(friends.getUser().getId());
+                subscriptionsList.add(loadedUser);
+            }
         }
 
         return modelAndView.addObject("subscriptionsList", subscriptionsList);

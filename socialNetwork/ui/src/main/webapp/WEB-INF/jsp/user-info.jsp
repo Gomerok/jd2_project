@@ -8,6 +8,7 @@
 	</div>
 	<div class="col-3 " >
         <b>${user.firstName} ${user.lastName}</b><br>
+        <b>Login:</b> ${user.login}<br>
 		<b>Gender:</b> ${user.gender}<br>
 		<b>Email:</b> ${user.email}<br>
 		<div style="overflow-wrap: break-word;">

@@ -2,18 +2,21 @@ package by.academy.it.service;
 
 import by.academy.it.dao.RoleDao;
 import by.academy.it.dao.UserDao;
+import by.academy.it.dto.AuthorizedUser;
 import by.academy.it.dto.UserDto;
 import by.academy.it.dto.UserValidDto;
-import by.academy.it.dto.AuthorizedUser;
 import by.academy.it.pojo.Role;
 import by.academy.it.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -24,11 +27,15 @@ public class UserService {
     @Autowired
     private RoleDao roleDao;
 
+
+    @Value("${password.salt.length}")
+    private int passwordSalt;
+
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
-    public void saveUser(UserValidDto newUser) {
+    public User saveUser(UserValidDto newUser) {
 
         User user = new User();
         user.setFirstName(newUser.getFirstName());
@@ -38,7 +45,7 @@ public class UserService {
         user.setGender(newUser.getGender());
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
 
-        String salt = BCrypt.gensalt(12);
+        String salt = BCrypt.gensalt(passwordSalt);
         String hashedPassword = BCrypt.hashpw(newUser.getPassword(), salt);
 
         user.setPassword(hashedPassword);
@@ -48,6 +55,8 @@ public class UserService {
         user.setProfileText(newUser.getProfileText());
         user.setActivitiStatus("ACTIVE");
         userDao.saveUser(user);
+        return user;
+
     }
 
     @Transactional
@@ -81,6 +90,7 @@ public class UserService {
         UserDto userDto = new UserDto(user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
+                user.getLogin(),
                 user.getEmail(),
                 user.getGender(),
                 user.getProfileImageName(),
@@ -107,7 +117,7 @@ public class UserService {
 
     @Transactional
     public void updateUserPassword(String newPassword, String userId) {
-        String salt = BCrypt.gensalt(12);
+        String salt = BCrypt.gensalt(passwordSalt);
         String hashedPassword = BCrypt.hashpw(newPassword, salt);
         userDao.updatePassword(hashedPassword, userId);
     }

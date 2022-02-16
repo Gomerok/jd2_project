@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,14 +44,14 @@ public class RegistrationController {
                                            @RequestParam("profileImage") MultipartFile profileImage
     ) throws IOException {
 
-        if(profileImage.getOriginalFilename().length()>60){
+        if (profileImage.getOriginalFilename().length() > 60) {
             result.addError(new FieldError("editUser", "profileImageName", "Image name too big, max=60 characters"));
         }
         if (result.hasErrors()) {
-            return new ModelAndView("registration").addObject("profileImage",profileImage);
+            return new ModelAndView("registration").addObject("profileImage", profileImage);
         }
 
-        Map<String, String> errors = userValidator.addUserValidator(newUser);
+        Map<String, String> errors = userValidator.checkUserLoginAndEmail(newUser);
         if (!errors.isEmpty()) {
             if (errors.get("existUserLogin") != null) {
                 result.addError(new FieldError("newUser", "login", errors.get("existUserLogin")));

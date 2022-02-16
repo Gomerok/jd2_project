@@ -1,8 +1,8 @@
 package by.academy.it.validator;
 
 import by.academy.it.dao.UserDao;
-import by.academy.it.dto.UserValidDto;
 import by.academy.it.dto.LoginUserDto;
+import by.academy.it.dto.UserValidDto;
 import by.academy.it.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -19,7 +19,7 @@ public class UserValidator {
     private UserDao userDao;
 
     @Transactional
-    public Map<String, String> addUserValidator(UserValidDto newUser) {
+    public Map<String, String> checkUserLoginAndEmail(UserValidDto newUser) {
         User userByLogin = userDao.readUserByLogin(newUser.getLogin());
         User userByEmail = userDao.readUserByEmail(newUser.getEmail());
         Map<String, String> validationErrors = new HashMap<>();
@@ -33,7 +33,7 @@ public class UserValidator {
     }
 
     @Transactional
-    public Map<String, String> loginUserValidator(LoginUserDto loginUser) {
+    public Map<String, String> checkUserLoginForm(LoginUserDto loginUser) {
         User userByLogin = userDao.readUserByLogin(loginUser.getLogin());
         Map<String, String> validationErrors = new HashMap<>();
         if (userByLogin == null) {

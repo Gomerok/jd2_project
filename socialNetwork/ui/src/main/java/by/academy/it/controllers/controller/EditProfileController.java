@@ -55,7 +55,7 @@ public class EditProfileController {
 
         ModelAndView editView = new ModelAndView("edit-profile").addObject("editUser", editUser);
 
-        if(newProfileImage.getOriginalFilename().length()>60){
+        if (newProfileImage.getOriginalFilename().length() > 60) {
             result.addError(new FieldError("editUser", "profileImageName", "Image name too big, max=60 characters"));
         }
         if (result.hasErrors() && !result.hasFieldErrors("password")) {
@@ -63,7 +63,7 @@ public class EditProfileController {
         }
 
         if (!currentUser.getLogin().equals(editUser.getLogin())) {
-            Map<String, String> errors = userValidator.addUserValidator(editUser);
+            Map<String, String> errors = userValidator.checkUserLoginAndEmail(editUser);
             if (!errors.isEmpty()) {
                 if (errors.get("existUserLogin") != null) {
                     result.addError(new FieldError("editUser", "login", errors.get("existUserLogin")));
@@ -72,7 +72,7 @@ public class EditProfileController {
             }
         }
         if (!currentUser.getEmail().equals(editUser.getEmail())) {
-            Map<String, String> errors = userValidator.addUserValidator(editUser);
+            Map<String, String> errors = userValidator.checkUserLoginAndEmail(editUser);
             if (!errors.isEmpty()) {
                 if (errors.get("existUserEmail") != null) {
                     result.addError(new FieldError("editUser", "email", errors.get("existUserEmail")));
@@ -116,16 +116,16 @@ public class EditProfileController {
 
         ModelAndView editPasswordView = new ModelAndView("edit-password");
         String invalidPassword = "Invalid password";
-        if(!userValidator.checkPassword(oldPassword, authorizedUser.getUserId())){
-            return editPasswordView.addObject("invalidPassword",invalidPassword);
+        if (!userValidator.checkPassword(oldPassword, authorizedUser.getUserId())) {
+            return editPasswordView.addObject("invalidPassword", invalidPassword);
         }
 
         String errorPassword = "Password cannot be empty min=8 max=25 characters";
-        if(newPassword.length()<8){
-            return editPasswordView.addObject("errorPassword",errorPassword);
+        if (newPassword.length() < 8) {
+            return editPasswordView.addObject("errorPassword", errorPassword);
         }
 
-        userService.updateUserPassword(newPassword,authorizedUser.getUserId());
+        userService.updateUserPassword(newPassword, authorizedUser.getUserId());
 
         return new ModelAndView("redirect:/home-page");
     }

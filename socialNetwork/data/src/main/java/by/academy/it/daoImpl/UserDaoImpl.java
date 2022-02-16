@@ -9,8 +9,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import java.io.Serializable;
 import java.util.List;
@@ -59,7 +57,7 @@ public class UserDaoImpl implements UserDao {
         query.setParameter("id", id);
         query.setParameter("activitiStatus", activitiStatus);
         int updatedRows = query.executeUpdate();
-        logger.info("Update user(id: " + id + ") activity status. New status: " + activitiStatus + "Updated rows: " + updatedRows);
+        logger.info("Update user(id: " + id + ") activity status. New status: " + activitiStatus + " Updated rows: " + updatedRows);
         return updatedRows;
     }
 
@@ -87,7 +85,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> readUsersByRole(String userRole) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("select u from User u join fetch u.news join u.roles r where r.name = :roleName", User.class);
+        Query query = session.createQuery("select u from User u join u.roles r where r.name = :roleName", User.class);
         query.setParameter("roleName", userRole);
         List<User> users = query.list();
         logger.info("Read users by role('" + userRole + "'). Users list: " + users);
@@ -132,7 +130,7 @@ public class UserDaoImpl implements UserDao {
         Session session = sessionFactory.getCurrentSession();
         Serializable id = user.getId();
         session.delete(user);
-        User loadedUser = session.load(User.class, id);
+        User loadedUser = session.get(User.class, id);
         if (loadedUser == null) {
             logger.info("User had been deleted: " + user);
         }

@@ -29,16 +29,13 @@ public class FriendsService {
     }
 
     @Transactional
-    public List<Friends> getUserFriends(String id){
+    public List<Friends> getUserFriends(String id) {
         List<Friends> userFriends = friendDao.readFriendsByUserId(id);
-        if (userFriends.isEmpty()) {
-            return null;
-        }
         return userFriends;
     }
 
     @Transactional
-    public List<Friends> readAllUserFriends(String id){
+    public List<Friends> readAllUserFriends(String id) {
         List<Friends> userFriends = friendDao.readAllFriendsByUserId(id);
         return userFriends;
     }
@@ -50,8 +47,8 @@ public class FriendsService {
 
     @Transactional
     public void addFriend(String userId, String friendId, String status) {
-        Friends userFriends = friendDao.getFriend(userId,friendId);
-        if(userFriends==null){
+        Friends userFriends = friendDao.getFriend(userId, friendId);
+        if (userFriends == null) {
             userFriends = new Friends();
         }
         userFriends.setFriendId(friendId);

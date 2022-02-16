@@ -1,7 +1,6 @@
 package by.academy.it.dao;
 
 import by.academy.it.pojo.User;
-import by.academy.it.pojo.UserNews;
 
 import java.io.Serializable;
 import java.util.List;

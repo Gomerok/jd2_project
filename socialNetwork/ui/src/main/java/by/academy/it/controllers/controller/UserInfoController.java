@@ -46,10 +46,10 @@ public class UserInfoController {
 
         List<UserNews> userNews = userNewsService.getNews(friendId);
         if (userNews != null) {
-            modelAndView.addObject("userNews",userNews);
+            modelAndView.addObject("userNews", userNews);
         }
 
-        return modelAndView.addObject("user", user).addObject("addFriendStatus",status);
+        return modelAndView.addObject("user", user).addObject("addFriendStatus", status);
     }
 
     @PostMapping("/home-page/search-user/user-info/{userId}")
@@ -63,27 +63,27 @@ public class UserInfoController {
 
         List<UserNews> userNews = userNewsService.getNews(friendId);
         if (userNews != null) {
-            modelAndView.addObject("userNews",userNews);
+            modelAndView.addObject("userNews", userNews);
         }
 
-        if(authorizedUser.getUserRole().equals("ROLE_ADMIN") && status.equals("not_status")){
+        if (authorizedUser.getUserRole().equals("ROLE_ADMIN") && status.equals("not_status")) {
             friendsService.addFriend(authorizedUser.getUserId(), friendId, "friend");
-            return modelAndView.addObject("addFriendStatus" , "friend");
+            return modelAndView.addObject("addFriendStatus", "friend");
         }
 
-        if(status.equals("not_status")){
+        if (status.equals("not_status")) {
             friendsService.addFriend(authorizedUser.getUserId(), friendId, "subscriber");
-            return modelAndView.addObject("addFriendStatus" , "subscriber");
+            return modelAndView.addObject("addFriendStatus", "subscriber");
         }
 
-        if(status.equals("subscriber")){
+        if (status.equals("subscriber")) {
             friendsService.deleteFriends(authorizedUser.getUserId(), friendId);
-            return modelAndView.addObject("addFriendStatus" , "not_status");
+            return modelAndView.addObject("addFriendStatus", "not_status");
         }
 
-        if(status.equals("friend")){
+        if (status.equals("friend")) {
             friendsService.deleteFriends(authorizedUser.getUserId(), friendId);
-            return modelAndView.addObject("addFriendStatus" , "not_status");
+            return modelAndView.addObject("addFriendStatus", "not_status");
         }
 
         return modelAndView.addObject("user", friend);

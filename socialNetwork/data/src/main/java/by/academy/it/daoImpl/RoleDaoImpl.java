@@ -9,7 +9,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
@@ -33,12 +32,15 @@ public class RoleDaoImpl implements RoleDao {
     }
 
     @Override
-    public List<Role> readRoleByName(String roleName) {
+    public Role readRoleByName(String roleName) {
         Session session = sessionFactory.getCurrentSession();
         List<Role> roles =
                 session.createQuery("from Role where name like '" + roleName + "'", Role.class).list();
         logger.info("Read role by name('" + roleName + "'). Role: " + roles);
-        return roles;
+        if (roles.isEmpty()) {
+            return null;
+        }
+        return roles.get(0);
     }
 
     @Override

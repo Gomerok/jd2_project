@@ -41,7 +41,7 @@ public class LoginController {
             return new ModelAndView("login");
         }
 
-        Map<String, String> errors = userValidator.loginUserValidator(loginUserDto);
+        Map<String, String> errors = userValidator.checkUserLoginForm(loginUserDto);
         if (!errors.isEmpty()) {
             if (errors.get("loginError") != null) {
                 result.addError(new FieldError("loginUser", "login", errors.get("loginError")));

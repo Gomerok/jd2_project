@@ -56,7 +56,7 @@ public class SearchController {
         }
         int pageSize = 5;
         int pageCount = (int) (Math.ceil(searchService.pageCount(str)) / pageSize + 1);
-        final List<UserDto> results = searchService.searchAmongAll(authorizedUser.getUserId(),str, pageId, pageSize);
+        final List<UserDto> results = searchService.searchAmongAll(authorizedUser.getUserId(), str, pageId, pageSize);
 
 
         modelAndView.addObject("results", results)

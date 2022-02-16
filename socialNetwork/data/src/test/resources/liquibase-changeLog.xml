@@ -5,16 +5,16 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
-    <changeSet id="1" author="gomerov">
+    <changeSet id="3" author="gomerov">
         <sql>
-            INSERT INTO
+            INSERT IGNORE INTO
             social_network_test.t_role(role_id, role_name) VALUES (1, 'ROLE_USER'), (2, 'ROLE_ADMIN');
 
-            INSERT INTO
+            INSERT IGNORE INTO
             social_network_test.t_user(user_id, login, password, activiti_status)
             VALUES ('4028c0817eb53bc3017eb55c8fb30000', 'admin', '$2a$12$Mj18A.MKWpeCWa05wQI9eO7TjxYdEEAVHrmgZZ4E.evH4iVZnVdPi', 'ACTIVE');
 
-            INSERT INTO
+            INSERT IGNORE INTO
             social_network_test.t_user_t_role(User_user_id, roles_role_id) VALUES ('4028c0817eb53bc3017eb55c8fb30000', 2);
         </sql>
     </changeSet>

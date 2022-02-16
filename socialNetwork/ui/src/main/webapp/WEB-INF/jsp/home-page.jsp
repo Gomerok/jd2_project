@@ -10,6 +10,7 @@ session.removeAttribute("str");%>
 	</div>
 	<div class="col-3 " >
         <b>${currentUser.firstName} ${currentUser.lastName}</b><br>
+        <b>Login:</b> ${currentUser.login}<br>
 		<b>Gender:</b> ${currentUser.gender}<br>
 		<b>Email:</b> ${currentUser.email}<br>
 		<div style="overflow-wrap: break-word;">
