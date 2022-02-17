@@ -2,7 +2,7 @@
 <jsp:include page="_header.jsp"/>
 <h2>My subscriptions</h2>
 
-<table class="table">
+<table class="table table-success table-striped">
 <tbody>
 <form class="d-flex" action="/uiT/home-page/subscriptions" method="post">
 

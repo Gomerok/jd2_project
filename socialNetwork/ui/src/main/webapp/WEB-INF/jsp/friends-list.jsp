@@ -2,7 +2,7 @@
 <jsp:include page="_header.jsp"/>
 <h2>My friends</h2>
 
-<table class="table">
+<table class="table table-success table-striped">
 <tbody>
 
 <c:forEach items="${friendsList}" var="result">
