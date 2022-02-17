@@ -43,6 +43,13 @@
 			<div class="m-1 p-1 border rounded-2" style="background-color: #CCD8D4;">
 				${news.description}<br>${news.creationTime}
 			</div>
+			<c:if test="${sessionScope.authorizedUser.userRole=='ROLE_ADMIN'}">
+			<form method="post" action="/uiT/home-page/search-user/user-info/${user.id}">
+			<div class="d-flex justify-content-end">
+                <button name="deleteNews" value="${news.id}" id ="deleteButton" type="submit" class="btn btn-outline-danger btn-sm" >Delete news</button>
+            </div>
+            </form>
+            </c:if>
 		</div>
 		</c:forEach>
 	</div>
