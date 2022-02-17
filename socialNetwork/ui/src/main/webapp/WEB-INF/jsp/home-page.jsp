@@ -35,14 +35,14 @@ session.removeAttribute("str");%>
 
 
 <div id="container" class="d-flex justify-content-center">
-	<div class="col-8 border rounded m-2 p-2" style="background-color: #FBF8F8;">
+	<div class="col-8 border rounded m-2 p-2" style="background-color: #F4F5E8;">
 		<form method="post" action="/uiT/home-page">
 		<c:forEach items="${userNews}" var="news">
-		<div class="border rounded-2" style="overflow-wrap: break-word;">
+		<div class="border rounded-2 m-1 p-1" style="overflow-wrap: break-word; background-color: #EEF4D6;">
 			<div class="m-1 p-1 border rounded-2" style="background-color: #BCD7D9;">
 				${news.header}
 			</div>
-			<div class="m-1 p-1 border rounded-2" style="background-color: #CCD8D4;">
+			<div class="m-1 p-1 border rounded-2" style="background-color: #D9E8EB;">
 				${news.description}<br>${news.creationTime}
 			</div>
 			<div class="d-flex justify-content-end">

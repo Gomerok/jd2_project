@@ -9,7 +9,7 @@
 </div>
 <br>
 <form class="d-flex" action="/uiT/home-page/search-user/${pageId}">
-<table class="table">
+<table class="table table-success table-striped">
 <tbody>
 
 <c:forEach items="${results}" var="result">
