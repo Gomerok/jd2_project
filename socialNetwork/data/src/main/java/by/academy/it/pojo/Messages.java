@@ -29,7 +29,7 @@ public class Messages implements Serializable {
     @Column(name = "timestamp")
     private Date timestamp;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "senderId")
     private User user;
 

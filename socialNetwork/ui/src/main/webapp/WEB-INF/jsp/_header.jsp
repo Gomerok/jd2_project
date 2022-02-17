@@ -43,7 +43,7 @@
 					<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="/uiT/home-page/search-user/1">Search people</a>
 						<li><a class="dropdown-item" href="/uiT/home-page/friends-list">My friends/Messages</a></li>
-						<li><a class="dropdown-item" href="/uiT/home-page/subscriptions">Subscriptions</a></li>
+						<li><a class="dropdown-item" href="/uiT/home-page/subscriptions">Subscribers</a></li>
 					</ul>
 				</li>
 
@@ -63,7 +63,7 @@
                 	</a>
                 	<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 		<li><a class="dropdown-item" href="/uiT/home-page/search-user/1">Search people</a>
-                		<li><a class="dropdown-item" href="/uiT/home-page/friends-list">Bad peoples/Messages</a></li>
+                		<li><a class="dropdown-item" href="/uiT/home-page/friends-list">Bad people/Messages</a></li>
                 	</ul>
                 </li>
 

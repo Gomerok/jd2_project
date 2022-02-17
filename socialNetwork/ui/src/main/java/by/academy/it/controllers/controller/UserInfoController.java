@@ -41,7 +41,9 @@ public class UserInfoController {
         }
         String status = friendsService.getFriendStatus(authorizedUser.getUserId(), friendId);
 
-        ModelAndView modelAndView = new ModelAndView("user-info");
+        ModelAndView modelAndView = new ModelAndView("user-info")
+                .addObject("subscribersCount",userService.countUserSubscribers(authorizedUser.getUserId()))
+                .addObject("friendsCount",userService.countUserFriends(authorizedUser.getUserId()));
         UserDto user = searchService.getUserById(friendId);
 
         List<UserNews> userNews = userNewsService.getNews(friendId);
@@ -58,8 +60,11 @@ public class UserInfoController {
                                        @SessionAttribute(name = "authorizedUser", required = false) AuthorizedUser authorizedUser) {
 
 
-        UserDto friend = searchService.getUserById(friendId);
-        ModelAndView modelAndView = new ModelAndView("user-info").addObject("user", friend);
+        UserDto user = searchService.getUserById(friendId);
+        ModelAndView modelAndView = new ModelAndView("user-info")
+                .addObject("user", user)
+                .addObject("subscribersCount",userService.countUserSubscribers(authorizedUser.getUserId()))
+                .addObject("friendsCount",userService.countUserFriends(authorizedUser.getUserId()));
 
         List<UserNews> userNews = userNewsService.getNews(friendId);
         if (userNews != null) {
@@ -86,6 +91,6 @@ public class UserInfoController {
             return modelAndView.addObject("addFriendStatus", "not_status");
         }
 
-        return modelAndView.addObject("user", friend);
+        return modelAndView.addObject("user", user);
     }
 }

@@ -1,7 +1,6 @@
 package by.academy.it.service;
 
-import by.academy.it.dao.RoleDao;
-import by.academy.it.dao.UserDao;
+import by.academy.it.dao.*;
 import by.academy.it.dto.AuthorizedUser;
 import by.academy.it.dto.UserDto;
 import by.academy.it.dto.UserValidDto;
@@ -23,6 +22,12 @@ public class UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private MessagesDao messagesDao;
+
+    @Autowired
+    private FriendDao friendDao;
 
     @Autowired
     private RoleDao roleDao;
@@ -125,6 +130,8 @@ public class UserService {
     @Transactional
     public void deleteUser(String userId) {
         User user = userDao.readUserById(userId);
+        friendDao.deleteAllUserFriends(userId);
+        messagesDao.deleteAllUserMessage(userId);
         userDao.deleteUser(user);
     }
 
@@ -137,6 +144,14 @@ public class UserService {
     public boolean checkBlocked(String userId) {
         String activitiStatus = userDao.readActivitiStatus(userId);
         return activitiStatus.equals("BLOCKED");
+    }
+    @Transactional
+    public long countUserSubscribers(String userId) {
+        return friendDao.countUserSubscribers(userId);
+    }
+    @Transactional
+    public long countUserFriends(String userId) {
+        return friendDao.countUserFriends(userId);
     }
 }
 

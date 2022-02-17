@@ -19,4 +19,10 @@ public interface FriendDao {
     List<Friends> readAllFriends();
 
     Friends getFriend(Serializable userId, Serializable friendId);
+
+    void deleteAllUserFriends(String userId);
+
+    long countUserSubscribers(String userId);
+
+    long countUserFriends(String userId);
 }

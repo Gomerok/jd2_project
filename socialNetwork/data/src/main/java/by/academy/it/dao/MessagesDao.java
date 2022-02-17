@@ -9,4 +9,6 @@ public interface MessagesDao {
     Serializable saveMessage(Messages senderUserMessage);
 
     List<Messages> readMessagesByUserIdAndFriendId(String userId, String friendId);
+
+    void deleteAllUserMessage(String userId);
 }

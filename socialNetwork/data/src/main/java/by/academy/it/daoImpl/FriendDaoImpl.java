@@ -5,6 +5,7 @@ import by.academy.it.pojo.Friends;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -61,6 +62,15 @@ public class FriendDaoImpl implements FriendDao {
         return userFriends.get(0);
     }
 
+    @Override
+    public void deleteAllUserFriends(String userId) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query =  session.createQuery("delete Friends where user_id = :userId or friendId=:userId");
+        query.setParameter("userId", userId);
+        int result = query.executeUpdate();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public List<Friends> readAllFriends() {
@@ -93,5 +103,27 @@ public class FriendDaoImpl implements FriendDao {
             return null;
         }
         return userFriends;
+    }
+
+    @Override
+    public long countUserSubscribers(String userId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session
+                .createQuery("select count(f.id) from Friends f " +
+                        "where friendId=:userId and status=:status")
+                .setParameter("userId", userId)
+                .setParameter("status", "subscriber");
+        return (Long) query.uniqueResult();
+    }
+
+    @Override
+    public long countUserFriends(String userId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session
+                .createQuery("select count(f.id) from Friends f " +
+                        "where (friendId=:userId or user_id=:userId) and status=:status")
+                .setParameter("userId", userId)
+                .setParameter("status", "friend");
+        return (Long) query.uniqueResult();
     }
 }

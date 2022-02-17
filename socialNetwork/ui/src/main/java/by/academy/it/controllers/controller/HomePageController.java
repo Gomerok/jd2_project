@@ -3,6 +3,7 @@ package by.academy.it.controllers.controller;
 import by.academy.it.dto.AuthorizedUser;
 import by.academy.it.dto.UserDto;
 import by.academy.it.pojo.UserNews;
+import by.academy.it.service.FriendsService;
 import by.academy.it.service.UserNewsService;
 import by.academy.it.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,9 @@ public class HomePageController {
             return new ModelAndView("blocked_page");
         }
 
-        ModelAndView homeView = new ModelAndView("home-page");
+        ModelAndView homeView = new ModelAndView("home-page")
+                .addObject("subscribersCount",userService.countUserSubscribers(authorizedUser.getUserId()))
+                .addObject("friendsCount",userService.countUserFriends(authorizedUser.getUserId()));
         UserDto currentUser = userService.getUserDtoByUserId(authorizedUser.getUserId());
         homeView.addObject("currentUser", currentUser);
 
@@ -53,7 +56,9 @@ public class HomePageController {
                                     @RequestParam(name = "newsHeader", required = false) String newsHeader,
                                     @RequestParam(name = "newsDescription", required = false) String newsDescription) {
 
-        ModelAndView homeView = new ModelAndView("home-page");
+        ModelAndView homeView = new ModelAndView("home-page")
+                .addObject("subscribersCount",userService.countUserSubscribers(authorizedUser.getUserId()))
+                .addObject("friendsCount",userService.countUserFriends(authorizedUser.getUserId()));;
         UserDto currentUser = userService.getUserDtoByUserId(authorizedUser.getUserId());
         homeView.addObject("currentUser", currentUser);
         if (!newsDescription.isEmpty() && !newsHeader.isEmpty()) {

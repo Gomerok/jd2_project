@@ -5,6 +5,7 @@ session.removeAttribute("str");%>
 <div id="container" class="d-flex justify-content-start m-2 p-2">
 	<div class="col-1">
 	</div>
+	<c:if test="${sessionScope.authorizedUser.userRole=='ROLE_USER'}">
 	<div class="col-2 m-2 p-2">
 		<img src="/uiT/images/${currentUser.profileImageName}" align="right" class="rounded-circle" height="200" width="200">
 	</div>
@@ -13,10 +14,23 @@ session.removeAttribute("str");%>
         <b>Login:</b> ${currentUser.login}<br>
 		<b>Gender:</b> ${currentUser.gender}<br>
 		<b>Email:</b> ${currentUser.email}<br>
+		<b>Number of friends:</b> ${friendsCount}<br>
+		<b>Number of subscribers:</b> ${subscribersCount}<br>
 		<div style="overflow-wrap: break-word;">
 		<b>About me:</b> ${currentUser.profileText}
 		</div>
 	</div>
+	</c:if>
+
+	<c:if test="${sessionScope.authorizedUser.userRole=='ROLE_ADMIN'}">
+	<div class="col-2 m-2 p-2">
+    </div>
+    <div class="col-3 " >
+	<b>Hello Admin</b><br>
+	<b>Number of bad people:</b> ${subscribersCount}<br>
+	</div>
+	</c:if>
+
 </div>
 
 

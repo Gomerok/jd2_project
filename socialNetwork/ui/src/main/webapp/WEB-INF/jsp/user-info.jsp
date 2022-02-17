@@ -11,6 +11,8 @@
         <b>Login:</b> ${user.login}<br>
 		<b>Gender:</b> ${user.gender}<br>
 		<b>Email:</b> ${user.email}<br>
+		<b>Number of friends:</b> ${friendsCount}<br>
+        <b>Number of subscribers:</b> ${subscribersCount}<br>
 		<div style="overflow-wrap: break-word;">
 		<b>About me:</b> ${user.profileText}
 		</div>

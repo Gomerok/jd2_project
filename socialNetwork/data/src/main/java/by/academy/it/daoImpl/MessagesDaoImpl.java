@@ -1,10 +1,12 @@
 package by.academy.it.daoImpl;
 
 import by.academy.it.dao.MessagesDao;
+import by.academy.it.pojo.Friends;
 import by.academy.it.pojo.Messages;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -40,6 +42,15 @@ public class MessagesDaoImpl implements MessagesDao {
                 .list();
         logger.info("Read messages by user id('" + userId + "') and friend id('" + friendId + "').Messages list: " + messages);
         return messages;
+    }
+
+    @Override
+    public void deleteAllUserMessage(String userId) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query =  session.createQuery("delete Messages where user.id = :userId or recipientId=:userId");
+        query.setParameter("userId", userId);
+        int result = query.executeUpdate();
     }
 
 }
